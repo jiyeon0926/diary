@@ -21,16 +21,13 @@ public class LoginService {
 
     public LoginResponseDto login(String email, String password) {
 
-        // 비밀번호 암호화
-        String encodingPassword = passwordEncoder.encode(password);
-
         Optional<User> findPassword = userRepository.findPasswordByEmail(email);
 
         if (findPassword.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "등록된 회원이 아닙니다.");
         }
 
-        boolean isPasswordMatches = passwordEncoder.checkPassword(password, findPassword.get().getPassword());
+        boolean isPasswordMatches = passwordEncoder.matches(password, findPassword.get().getPassword());
 
         if (!isPasswordMatches) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 다릅니다.");

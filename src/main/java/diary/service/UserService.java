@@ -3,7 +3,6 @@ package diary.service;
 import diary.config.PasswordEncoder;
 import diary.entity.User;
 import diary.repository.UserRepository;
-import diary.responseDto.UserResponseDto;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -58,8 +57,8 @@ public class UserService {
 
 
     // 유저가 존재하는지 확인
-    public UserResponseDto findById(Long id) {
-        // ㅇ
+    public User findById(Long id) {
+
         Optional<User> optionalUser = userRepository.findById(id);
 
         if (optionalUser.isEmpty()) {
@@ -68,6 +67,6 @@ public class UserService {
 
         User findUser = optionalUser.get();
 
-        return new UserResponseDto(findUser.getEmail());
+        return new User(findUser.getEmail(), findUser.getUsername(), findUser.getPassword());
     }
 }

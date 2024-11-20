@@ -1,8 +1,8 @@
 package diary.controller;
 
+import diary.entity.User;
 import diary.requestDto.LoginRequestDto;
 import diary.responseDto.LoginResponseDto;
-import diary.responseDto.UserResponseDto;
 import diary.service.LoginService;
 import diary.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -44,7 +44,7 @@ public class LoginController {
         HttpSession session = request.getSession();
 
         // 회원정보를 가져옴
-        UserResponseDto loginUser = userService.findById(userId);
+        User loginUser = userService.findById(userId);
         log.info(loginUser.toString());
 
         // session에 loginUser 저장 (이메일이 담김)

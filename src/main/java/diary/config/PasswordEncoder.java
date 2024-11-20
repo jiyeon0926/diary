@@ -10,14 +10,9 @@ public class PasswordEncoder {
         return BCrypt.withDefaults().hashToString(BCrypt.MIN_COST, rawPassword.toCharArray());
     }
 
+    // 비밀번호 검증 (rawPassword
     public boolean matches(String rawPassword, String encodedPassword) {
         BCrypt.Result result = BCrypt.verifyer().verify(rawPassword.toCharArray(), encodedPassword);
         return result.verified;
-    }
-
-    // 비밀번호 검증
-    public boolean checkPassword(String rawPassword, String hashedPassword) {
-        // BCrypt의 verifyer를 사용하여 비밀번호를 검증
-        return BCrypt.verifyer().verify(rawPassword.toCharArray(), hashedPassword).verified;
     }
 }
