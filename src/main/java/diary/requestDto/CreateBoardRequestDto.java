@@ -15,4 +15,5 @@ public class CreateBoardRequestDto {
         this.content = content;
         this.weather = weather;
     }
+
 }

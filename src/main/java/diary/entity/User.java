@@ -5,8 +5,8 @@ import lombok.Getter;
 
 @Getter
 @Entity
-@Table(name="user")
-public class User  extends Base{
+@Table(name = "user")
+public class User extends Base {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,9 +22,9 @@ public class User  extends Base{
     private String email;
 
     @Column(name = "is_valid")
-    private Boolean isValid=true;
+    private Boolean isValid = true;
 
-    public User(){
+    public User() {
 
     }
 
