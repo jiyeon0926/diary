@@ -3,11 +3,13 @@ package diary.service;
 import diary.config.PasswordEncoder;
 import diary.entity.User;
 import diary.repository.UserRepository;
+import diary.responseDto.UserResponseDto;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 @Service
@@ -52,5 +54,20 @@ public class UserService {
         // db에 저장
         User user = new User(email, username, encodingPassword);
         userRepository.save(user);
+    }
+
+
+    // 유저가 존재하는지 확인
+    public UserResponseDto findById(Long id) {
+        // ㅇ
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        if (optionalUser.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "등록된 회원이 아닙니다.");
+        }
+
+        User findUser = optionalUser.get();
+
+        return new UserResponseDto(findUser.getEmail());
     }
 }
