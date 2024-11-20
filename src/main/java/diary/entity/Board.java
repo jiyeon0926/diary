@@ -20,7 +20,7 @@ public class Board  extends Base{
     private String weather;
 
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     public Board(){
