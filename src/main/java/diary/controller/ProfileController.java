@@ -30,8 +30,8 @@ public class ProfileController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> passwordCheck(@PathVariable Long id){
-        profileService.checkPasswordById(id);
+    public ResponseEntity<Void> passwordCheck(@PathVariable Long id, @RequestBody ProfileRequestDto profileRequestDto){
+        profileService.checkPassword(id, profileRequestDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
