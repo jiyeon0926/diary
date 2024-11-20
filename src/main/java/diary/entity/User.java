@@ -22,7 +22,7 @@ public class User  extends Base{
     private String email;
 
     @Column(name = "is_valid")
-    private Boolean isValid=false;
+    private Boolean isValid=true;
 
     public User(){
 
