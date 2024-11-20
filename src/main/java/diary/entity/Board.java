@@ -1,25 +1,30 @@
-package diary.controller;
+package diary.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import org.apache.catalina.User;
+
 
 @Getter
 @Entity
 @Table(name="board")
-public class Board {
+public class Board  extends Base{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "longtext")
+    @Column(nullable = false, columnDefinition = "longtext")
     private String content;
+
+    @Column(nullable = false)
+    private String weather;
 
     @ManyToOne
     @JoinColumn(name = "id")
     private User user;
 
+    public Board(){
 
+    }
 
 }
