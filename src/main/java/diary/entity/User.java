@@ -10,7 +10,7 @@ public class User  extends Base{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long d;
+    private Long id;
 
     @Column(nullable = false, unique = true)
     private String username;
