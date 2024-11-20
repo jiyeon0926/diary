@@ -14,8 +14,4 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class BoardController {
 
-    @PostMapping
-    public ResponseEntity<BoardResponseDto> save(@RequestBody CreateBoardRequestDto requestDto){
-
-    }
 }
