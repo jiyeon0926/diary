@@ -19,6 +19,7 @@ public class BoardResponseDto {
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
     }
+
     public static BoardResponseDto toDto(Board board) {
         return new BoardResponseDto(
                 board.getId(),

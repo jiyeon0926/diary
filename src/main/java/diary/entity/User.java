@@ -33,4 +33,6 @@ public class User extends Base {
         this.username = username;
         this.password = password;
     }
+
+
 }
