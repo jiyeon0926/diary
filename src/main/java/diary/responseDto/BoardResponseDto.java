@@ -1,9 +1,10 @@
 package diary.responseDto;
 
 import diary.entity.Board;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
-
+@Getter
 public class BoardResponseDto {
     private final Long id;
     private final String title;
@@ -19,6 +20,7 @@ public class BoardResponseDto {
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
     }
+
     public static BoardResponseDto toDto(Board board) {
         return new BoardResponseDto(
                 board.getId(),
