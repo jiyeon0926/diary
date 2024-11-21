@@ -7,6 +7,7 @@ import diary.service.BoardService;
 import diary.service.FollowService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -33,7 +35,8 @@ public class BoardController {
 
     //boards?page=0&size=10
     @GetMapping
-    public ResponseEntity<List<BoardResponseDto>> findAll(@RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<List<BoardResponseDto>> findAll(@Valid
+                                                          @RequestParam(defaultValue = "0") int page,
                                                           @RequestParam(defaultValue = "10") int size,
                                                           @RequestParam(defaultValue = "createdAt") String sortBy,
                                                           @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
@@ -51,12 +54,12 @@ public class BoardController {
         } else {
             boards = boardService.findAll(pageables);
         }
-
         return ResponseEntity.ok().body(boards);
     }
 
     @GetMapping("/following")
-    public ResponseEntity<List<BoardResponseDto>> findFollowboard(@RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<List<BoardResponseDto>> findFollowboard(@Valid
+                                                                  @RequestParam(defaultValue = "0") int page,
                                                                   @RequestParam(defaultValue = "10") int size,
                                                                   @RequestParam(defaultValue = "createdAt") String sortBy,
                                                                   @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
@@ -88,14 +91,14 @@ public class BoardController {
 
         return ResponseEntity.ok(boards);
     }
-
+    //단건조회
     @GetMapping("/{id}")
     public ResponseEntity<BoardResponseDto> findById(@PathVariable Long id) {
         return ResponseEntity.ok().body(boardService.findById(id));
     }
 
     @PostMapping
-    public ResponseEntity<BoardResponseDto> save(@RequestBody CreateBoardRequestDto requestDto, HttpServletRequest reqeust) {
+    public ResponseEntity<BoardResponseDto> save(@Valid @RequestBody CreateBoardRequestDto requestDto, HttpServletRequest reqeust) {
         HttpSession session = reqeust.getSession();
         User loginUser = (User) session.getAttribute("loginUser");
         return ResponseEntity.status(HttpStatus.CREATED).body(boardService.saveBoard(requestDto, loginUser));

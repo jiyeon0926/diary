@@ -28,4 +28,5 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     @Query("SELECT b FROM Board b INNER JOIN Follow f ON b.user.id= f.followee.id WHERE f.follower.id = :id AND b.createdAt BETWEEN :startDate AND :endDate")
     List<Board> findByFollowingUsersAndPeriod(Long id, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
 
+
 }
