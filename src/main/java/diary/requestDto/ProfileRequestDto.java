@@ -4,7 +4,13 @@ import lombok.Getter;
 
 @Getter
 public class ProfileRequestDto {
-    private Long id;
-    private String password;
-    private String username;
+    private final Long id;
+    private final String password;
+    private final String username;
+
+    public ProfileRequestDto(Long id, String password, String username) {
+        this.id = id;
+        this.password = password;
+        this.username = username;
+    }
 }
