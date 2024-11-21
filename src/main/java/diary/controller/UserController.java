@@ -52,6 +52,8 @@ public class UserController {
         // 비밀번호 확인
         userService.checkPassword(email, password);
 
+        session.setAttribute("allowResign", true);
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -60,8 +62,14 @@ public class UserController {
 
         HttpSession session = request.getSession();
 
+        Boolean allowResign = (Boolean) session.getAttribute("allowResign");
+
+        if (allowResign == null || !allowResign) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
         // 로그인 되어있지 않으면 400 상태코드 throw
-        if (session == null || session.getAttribute("loginUser") == null) {
+        if (session.getAttribute("loginUser") == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
@@ -72,7 +80,7 @@ public class UserController {
         // 유저 삭제
         userService.deleteUser(userId);
 
-        // 세션 삭제 (로그아웃)
+        // 세션 삭제
         session.invalidate();
 
         return new ResponseEntity<>(HttpStatus.OK);
