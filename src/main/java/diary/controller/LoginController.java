@@ -47,7 +47,7 @@ public class LoginController {
         User loginUser = userService.findById(userId);
         log.info(loginUser.toString());
 
-        // session에 loginUser 저장 (이메일이 담김)
+        // session에 loginUser 저장
         session.setAttribute("loginUser", loginUser);
 
         return new ResponseEntity<>(HttpStatus.OK);
