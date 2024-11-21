@@ -39,10 +39,10 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호는 대소문자 포함 영문 + 숫자 + 특수문자를 최소 1글자씩 포함, 최소 8글자 이상 20글자까지");
         }
 
-        // 중복된 사용자 아이디인지 체크 400 상태코드 throw
+        // 중복된 사용자 아이디인지 / 이미 탈퇴한 회원인지 체크
         boolean isExistsEmail = userRepository.existsByEmail(email);
 
-        // 중복된 사용자 아이디로 가입하는 경우
+        // 중복된 사용자 아이디로 가입하는 경우 400 상태코드 throw
         if (isExistsEmail) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 사용 중인 이메일입니다.");
         }
@@ -69,5 +69,33 @@ public class UserService {
 
         // 유저가 있으면 유저를 반환
         return optionalUser.get();
+    }
+
+    // 비밀번호 일치 여부
+    public void checkPassword(String email, String password) {
+
+        // 이메일로 유저 찾기
+        User findUser = userRepository.findByEmailElseThrow(email);
+
+        // 비밀번호 일치 여부
+        boolean isPasswordMatches = passwordEncoder.matches(password, findUser.getPassword());
+
+        // 비밀번호가 일치 하지 않으면 401 상태코드 throw
+        if (!isPasswordMatches) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 다릅니다.");
+        }
+    }
+
+    public void deleteUser(Long id) {
+
+        // id로 유저 찾기
+        User findUser = userRepository.findByIdElseThrow(id);
+
+        // 유저 삭제
+        int updateRow = userRepository.updateIsValidById(findUser.getId());
+
+        if (updateRow == 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 탈퇴한 회원이거나 회원이 없습니다.");
+        }
     }
 }
