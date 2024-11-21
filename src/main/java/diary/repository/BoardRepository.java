@@ -1,4 +1,14 @@
 package diary.repository;
 
-public class BoardRepository {
+import diary.entity.Board;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
+public interface BoardRepository extends JpaRepository<Board, Long> {
+
+
+
+
+
 }

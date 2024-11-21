@@ -17,6 +17,9 @@ public class Board  extends Base{
     private String content;
 
     @Column(nullable = false)
+    private String title;
+
+    @Column(nullable = false)
     private String weather;
 
     @ManyToOne
@@ -27,4 +30,13 @@ public class Board  extends Base{
 
     }
 
+    public Board(String title, String content, String weather) {
+        this.title = title;
+        this.content = content;
+        this.weather = weather;
+    }
+
+    public void setUser(){
+        this.user = new User();
+    }
 }
