@@ -34,17 +34,18 @@ public class BoardService {
             BoardResponseDto boardResponseDto = BoardResponseDto.toDto(board);
             boardResponseDtoList.add(boardResponseDto);
         }
+
         return boardResponseDtoList;
     }
 
     public BoardResponseDto findById(Long id) {
         return BoardResponseDto.toDto(findBoardById(id));
-
     }
 
     private Board findBoardById(Long id){
         return boardRepository.findById(id).orElseThrow(()->new IllegalArgumentException("올바르지 않은 ID값입니다."));
     }
+
 
     @Transactional
     public BoardResponseDto saveBoard(CreateBoardRequestDto requestDto,User user) {
@@ -54,15 +55,23 @@ public class BoardService {
     }
 
     @Transactional
-    public BoardResponseDto update(Long id, CreateBoardRequestDto requestDto) {
+    public BoardResponseDto update(Long id, CreateBoardRequestDto requestDto,User user) {
         Board board = findBoardById(id);
-        board.update(requestDto.getTitle(),requestDto.getContent(),requestDto.getWeather());
+
+        if (!board.getUser().getId().equals(user.getId())) {
+            throw new IllegalArgumentException("작성자만 수정 할 수 있습니다.");
+        }
+
+        board.update(requestDto.getTitle(),requestDto.getContent(),requestDto.getWeather(),user);
         return BoardResponseDto.toDto(board);
     }
 
+    public void delete(Long id,User user) {
+        Board board = findBoardById(id);
+        if (!board.getUser().getId().equals(user.getId())) {
+            throw new IllegalArgumentException("작성자만 삭제 할 수 있습니다.");
+        }
 
-    public void delete(Long id) {
-        findBoardById(id);
         boardRepository.deleteById(id);
     }
 

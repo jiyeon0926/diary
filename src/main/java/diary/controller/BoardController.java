@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +25,10 @@ public class BoardController {
 
     //boards?page=0&size=10
     @GetMapping()
-    public ResponseEntity<List<BoardResponseDto>> findAll(Pageable pageable) {
-        Pageable pageables = PageRequest.of(0,1);
-        return ResponseEntity.ok().body(boardService.findAll(pageable));
+    public ResponseEntity<List<BoardResponseDto>> findAll(@RequestParam(defaultValue = "0") int page, @RequestParam (defaultValue = "10")int size) {
+
+        Pageable pageables = PageRequest.of(page,size, Sort.by(Sort.Direction.DESC, "modifiedAt"));
+        return ResponseEntity.ok().body(boardService.findAll(pageables));
     }
 
     @GetMapping("/{id}")
@@ -35,20 +37,24 @@ public class BoardController {
     }
 
     @PostMapping
-    public ResponseEntity<BoardResponseDto> save(@RequestBody CreateBoardRequestDto requestDto,HttpServletRequest  reqeust) {
+    public ResponseEntity<BoardResponseDto> save(@RequestBody CreateBoardRequestDto requestDto,HttpServletRequest reqeust) {
         HttpSession session = reqeust.getSession();
         User loginUser = (User) session.getAttribute("loginUser");
         return ResponseEntity.status(HttpStatus.CREATED).body(boardService.saveBoard(requestDto,loginUser));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<BoardResponseDto> update(@PathVariable Long id, @RequestBody CreateBoardRequestDto requestDto) {
-        return ResponseEntity.ok().body(boardService.update(id,requestDto));
+    public ResponseEntity<BoardResponseDto> update(@PathVariable Long id, @RequestBody CreateBoardRequestDto requestDto,HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        User loginUser = (User) session.getAttribute("loginUser");
+        return ResponseEntity.ok().body(boardService.update(id,requestDto,loginUser));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id) {
-        boardService.delete(id);
+    public ResponseEntity<String> delete(@PathVariable Long id,HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        User loginUser = (User) session.getAttribute("loginUser");
+        boardService.delete(id,loginUser);
         return ResponseEntity.ok().body("삭제완료");
     }
 

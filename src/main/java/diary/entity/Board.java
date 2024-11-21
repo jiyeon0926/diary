@@ -42,9 +42,10 @@ public class Board  extends Base{
     }
 
 
-    public void update(String title, String content, String weather) {
+    public void update(String title, String content, String weather,User user) {
         this.title = title;
         this.content = content;
         this.weather = weather;
+        this.user = user;
     }
 }
