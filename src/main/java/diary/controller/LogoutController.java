@@ -1,6 +1,5 @@
 package diary.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,10 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class LogoutController {
 
     @PostMapping
-    public ResponseEntity<Void> logout(HttpServletRequest request) {
-
-        // 로그인하지 않으면 HttpSession이 null로 반환된다.
-        HttpSession session = request.getSession(false);
+    public ResponseEntity<Void> logout(HttpSession session) {
 
         // 세션이 존재하면 -> 로그인이 된 경우
         if(session != null && session.getAttribute("loginUser") != null) {
