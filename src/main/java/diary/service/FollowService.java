@@ -34,6 +34,11 @@ public class FollowService {
         // 팔로우 관계인지 확인
         Follow follow = followRepository.findByFollowerAndFollowee(follower.getId(), followee.getId());
 
+        // 자기 자신을 팔로우 할 수 없음
+        if (follower.getId() == followee.getId()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You can't follow yourself.");
+        }
+
         if (follow == null) {
             ClassId id = new ClassId(follower.getId(), followee.getId());
             Follow following = new Follow(id, follower, followee);
