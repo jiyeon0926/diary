@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -44,35 +43,37 @@ public class BoardService {
     }
 
     public BoardResponseDto findById(Long id) {
-        return BoardResponseDto.toDto(findBoardById(id));
+        return BoardResponseDto.toDto(boardRepository.findByIdOrElseThrow(id));
     }
 
-    private Board findBoardById(Long id){
-        return boardRepository.findById(id).orElseThrow(()->new IllegalArgumentException("올바르지 않은 ID값입니다."));
-    }
 
 
     @Transactional
     public BoardResponseDto saveBoard(CreateBoardRequestDto requestDto,User user) {
-        Board board = new Board(requestDto.getTitle(),requestDto.getContent(),requestDto.getWeather(),user);
+         Board board = new Board(requestDto.getTitle(),requestDto.getContent(),requestDto.getWeather(),user);
          Board savedBoard = boardRepository.save(board);
          return BoardResponseDto.toDto(savedBoard);
     }
 
     @Transactional
     public BoardResponseDto update(Long id, CreateBoardRequestDto requestDto,User user) {
-        Board board = findBoardById(id);
+        // Optional 처리
+        Board board = boardRepository.findByIdOrElseThrow(id);
 
+        // 작성자 확인
         if (!board.getUser().getId().equals(user.getId())) {
-            throw new IllegalArgumentException("작성자만 수정 할 수 있습니다.");
+            throw new IllegalArgumentException("작성자만 수정할 수 있습니다.");
         }
 
-        board.update(requestDto.getTitle(),requestDto.getContent(),requestDto.getWeather(),user);
+        // 게시글 수정
+        board.update(requestDto.getTitle(), requestDto.getContent(), requestDto.getWeather(), user);
+
+        // 수정된 게시글을 DTO로 변환하여 반환
         return BoardResponseDto.toDto(board);
     }
 
     public void delete(Long id,User user) {
-        Board board = findBoardById(id);
+        Board board = boardRepository.findByIdOrElseThrow(id);
         if (!board.getUser().getId().equals(user.getId())) {
             throw new IllegalArgumentException("작성자만 삭제 할 수 있습니다.");
         }
