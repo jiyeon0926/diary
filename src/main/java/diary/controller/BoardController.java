@@ -28,8 +28,20 @@ public class BoardController {
     public ResponseEntity<List<BoardResponseDto>> findAll(@RequestParam(defaultValue = "0") int page, @RequestParam (defaultValue = "10")int size) {
 
         Pageable pageables = PageRequest.of(page,size, Sort.by(Sort.Direction.DESC, "modifiedAt"));
+
         return ResponseEntity.ok().body(boardService.findAll(pageables));
     }
+
+    @GetMapping()
+    public ResponseEntity<List<BoardResponseDto>> findFollowingboard(@RequestParam(defaultValue = "0") int page, @RequestParam (defaultValue = "10")int size,HttpServletRequest reqeust) {
+        HttpSession session = reqeust.getSession();
+        User loginUser = (User) session.getAttribute("loginUser");
+
+        Pageable pageables = PageRequest.of(page,size, Sort.by(Sort.Direction.DESC, "modifiedAt"));
+
+        return ResponseEntity.ok().body(boardService.findAll(pageables));
+    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<BoardResponseDto> findById(@PathVariable Long id) {
