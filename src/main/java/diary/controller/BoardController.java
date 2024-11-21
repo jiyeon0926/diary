@@ -34,4 +34,7 @@ public class BoardController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(boardService.saveBoard(requestDto));
     }
+
+    @PostMapping
+    public ResponseEntity<BoardResponseDto> good(@RequestBody )
 }

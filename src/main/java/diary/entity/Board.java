@@ -22,9 +22,6 @@ public class Board  extends Base{
     @Column(nullable = false)
     private String weather;
 
-    @Column(nullable = false)
-    private Long good;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
