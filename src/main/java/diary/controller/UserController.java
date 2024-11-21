@@ -1,14 +1,16 @@
 package diary.controller;
 
+import diary.entity.User;
+import diary.requestDto.LoginRequestDto;
 import diary.requestDto.SignupRequestDto;
 import diary.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/users")
@@ -28,5 +30,59 @@ public class UserController {
         );
 
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PostMapping("/checkuser")
+    public ResponseEntity<Void> checkUser(@RequestBody LoginRequestDto requestDto, HttpSession session) {
+
+        // 세션에서 유저 정보 가져오기
+        User loginUser = (User) session.getAttribute("loginUser");
+
+        // 유저정보에서 이메일 가져오기
+        String sessionEmail = loginUser.getEmail();
+        // 이메일, 비밀번호 받은거
+        String email = requestDto.getEmail();
+        String password = requestDto.getPassword();
+
+        // 만약 로그인 된 유저의 이메일과 입력받은 이메일이 다르면 400 상태코드 throw
+        if (!sessionEmail.equals(email)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        // 비밀번호 확인
+        userService.checkPassword(email, password);
+
+        session.setAttribute("allowResign", true);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> resign(HttpServletRequest request) {
+
+        HttpSession session = request.getSession();
+
+        Boolean allowResign = (Boolean) session.getAttribute("allowResign");
+
+        if (allowResign == null || !allowResign) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        // 로그인 되어있지 않으면 400 상태코드 throw
+        if (session.getAttribute("loginUser") == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        // 세션에서 유저 id 찾기
+        User loginUser = (User) session.getAttribute("loginUser");
+        Long userId = loginUser.getId();
+
+        // 유저 삭제
+        userService.deleteUser(userId);
+
+        // 세션 삭제
+        session.invalidate();
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

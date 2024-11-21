@@ -9,7 +9,9 @@ import diary.responseDto.FollowResponseDto;
 import diary.responseDto.FollowerResponseDto;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,6 +34,11 @@ public class FollowService {
         // 팔로우 관계인지 확인
         Follow follow = followRepository.findByFollowerAndFollowee(follower.getId(), followee.getId());
 
+        // 자기 자신을 팔로우 할 수 없음
+        if (follower.getId() == followee.getId()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You can't follow yourself.");
+        }
+
         if (follow == null) {
             ClassId id = new ClassId(follower.getId(), followee.getId());
             Follow following = new Follow(id, follower, followee);
@@ -48,6 +55,10 @@ public class FollowService {
 
         // 팔로우 관계인지 확인
         Follow follow = followRepository.findByFollowerAndFollowee(follower.getId(), followee.getId());
+
+        if (follow == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Follow relationship not found");
+        }
 
         followRepository.delete(follow);
     }
