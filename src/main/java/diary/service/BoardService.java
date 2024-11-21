@@ -6,6 +6,7 @@ import diary.repository.BoardRepository;
 import diary.repository.ProfileRepository;
 import diary.requestDto.CreateBoardRequestDto;
 import diary.responseDto.BoardResponseDto;
+import diary.responseDto.FollowResponseDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -13,8 +14,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -75,4 +80,58 @@ public class BoardService {
         boardRepository.deleteById(id);
     }
 
+    public List<BoardResponseDto> findAllByFollowingUsers(List<FollowResponseDto> followingUserIds, Pageable pageable) {
+        List<BoardResponseDto> boardResponseDtoList = new ArrayList<>();
+
+        // 게시글 가져오기
+        Page<Board> boardPage = boardRepository.findAllByUserIdIn(followingUserIds, pageable);
+
+        // 게시글을 DTO로 변환
+        for (Board board : boardPage.getContent()) {
+            boardResponseDtoList.add(BoardResponseDto.toDto(board));
+        }
+
+        return boardResponseDtoList;
+    }
+
+    public List<BoardResponseDto> findAllByFollowingUsersTest(Long userId, Pageable pageable) {
+        List<BoardResponseDto> boardResponseDtoList = new ArrayList<>();
+
+        // 게시글 가져오기
+        Page<Board> boardList = boardRepository.findAllByFollowingUsers(userId,pageable);
+
+        // 게시글을 DTO로 변환
+       for (Board board : boardList) {
+            boardResponseDtoList.add(BoardResponseDto.toDto(board));
+        }
+        return boardResponseDtoList;
+    }
+
+    public List<BoardResponseDto> findPostsByPeriod(LocalDate startDate, LocalDate endDate,Pageable pageable) {
+
+        // LocalDate를 LocalDateTime으로 변환
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
+
+        List<Board> boards = boardRepository.findByCreatedAtBetween(startDateTime, endDateTime, pageable);
+
+        List<BoardResponseDto> boardResponseDtoList = new ArrayList<>();
+        for (Board board : boards) {
+            boardResponseDtoList.add(BoardResponseDto.toDto(board));
+        }
+        return boardResponseDtoList;
+    }
+
+    public List<BoardResponseDto> findPostsByFollowingUsersAndPeriod(Long id, LocalDate startDate, LocalDate endDate, Pageable pageable) {
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
+
+        List<Board> boards = boardRepository.findByFollowingUsersAndPeriod(id, startDateTime, endDateTime, pageable);
+
+        List<BoardResponseDto> boardResponseDtoList = new ArrayList<>();
+        for (Board board : boards) {
+            boardResponseDtoList.add(BoardResponseDto.toDto(board));
+        }
+        return boardResponseDtoList;
+    }
 }
