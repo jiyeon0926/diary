@@ -9,7 +9,9 @@ import diary.responseDto.FollowResponseDto;
 import diary.responseDto.FollowerResponseDto;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,6 +50,10 @@ public class FollowService {
 
         // 팔로우 관계인지 확인
         Follow follow = followRepository.findByFollowerAndFollowee(follower.getId(), followee.getId());
+
+        if (follow == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Follow relationship not found");
+        }
 
         followRepository.delete(follow);
     }
