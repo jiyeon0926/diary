@@ -2,9 +2,11 @@ package diary.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Entity
+@Setter
 @Table(name = "user")
 public class User extends Base {
 
@@ -34,5 +36,8 @@ public class User extends Base {
         this.password = password;
     }
 
-
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 }

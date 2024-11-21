@@ -65,8 +65,6 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "등록된 회원이 아닙니다.");
         }
 
-        User findUser = optionalUser.get();
-
-        return new User(findUser.getEmail(), findUser.getUsername(), findUser.getPassword());
+        return optionalUser.get();
     }
 }

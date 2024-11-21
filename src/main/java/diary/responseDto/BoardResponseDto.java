@@ -11,7 +11,7 @@ public class BoardResponseDto {
     private final String weather;
     private final LocalDateTime createdAt;
     private final LocalDateTime modifiedAt;
-    public BoardResponseDto(Long id, String title, String content, String weather,LocalDateTime createdAt, LocalDateTime modifiedAt) {
+    public BoardResponseDto(Long id, String title, String content, String weather, LocalDateTime createdAt, LocalDateTime modifiedAt) {
         this.id= id;
         this.title= title;
         this.content = content;
