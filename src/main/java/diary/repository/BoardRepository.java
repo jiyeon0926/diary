@@ -35,11 +35,23 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
         return findById(id).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND, "찾을 수 없는 아이디 값입니다."+id));
     }
 
+    //전체 게시물 좋아요 많은순 조회
     @Query("SELECT new diary.responseDto.BoardResponseDto(b.id, b.title, b.content, b.weather,b.createdAt,b.modifiedAt, COUNT(gb.board.id))  FROM Board b LEFT JOIN GoodBoard  gb ON b.id = gb.board.id GROUP BY b.id ORDER BY COUNT(gb.board.id) DESC")
     Page<BoardResponseDto> findAllOrderByGoodConut(Pageable pageable);
 
+    //기간별 게시물 좋아요 많은순 조회
     @Query("SELECT new diary.responseDto.BoardResponseDto(b.id, b.title, b.content, b.weather,b.createdAt,b.modifiedAt, COUNT(gb.board.id)) FROM Board b LEFT JOIN GoodBoard  gb ON b.id = gb.board.id WHERE b.createdAt BETWEEN :startDate AND :endDate GROUP BY b.id ORDER BY COUNT(gb.id) DESC")
-    Page<BoardResponseDto> findPostsByPeriodAndGood(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate,Pageable pageable);
+    Page<BoardResponseDto> findPostsByPeriodAndGood(@Param("startDate")LocalDateTime startDateTime, @Param("endDate")LocalDateTime endDateTime, Pageable pageable);
+
+    //팔로우한 유저들의 전체 게시글 좋아요 많은순 조회
+    @Query("SELECT new diary.responseDto.BoardResponseDto(b.id, b.title, b.content, b.weather,b.createdAt,b.modifiedAt, COUNT(gb.board.id)) FROM Board b INNER JOIN Follow f ON b.user.id = f.followee.id LEFT JOIN GoodBoard gb ON b.id = gb.board.id WHERE f.follower.id = :id  GROUP BY b.id ORDER BY COUNT(gb.id) DESC")
+    Page<BoardResponseDto> findAllByFollowingUsersGood(@Param("id")Long id,Pageable pageable);
+
+    //팔로우한 유저들의 기간별 게시글 좋아요 많은순 조회
+    @Query("SELECT new diary.responseDto.BoardResponseDto(b.id, b.title, b.content, b.weather,b.createdAt,b.modifiedAt, COUNT(gb.board.id)) FROM Board b INNER JOIN Follow f ON b.user.id = f.followee.id LEFT JOIN GoodBoard gb ON b.id = gb.board.id WHERE f.follower.id = :id AND b.createdAt BETWEEN :startDate AND :endDate GROUP BY b.id ORDER BY COUNT(gb.id) DESC")
+    Page<BoardResponseDto> findByFollowingUsersAndPeriodAndGood(@Param("id")Long id ,@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate,Pageable pageable);
+
+
 
 
 }

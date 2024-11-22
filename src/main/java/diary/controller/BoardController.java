@@ -85,24 +85,35 @@ public class BoardController {
         }
 
         // 허용된 정렬 기준만 처리
-        List<String> allowedSortFields = Arrays.asList("createdAt", "modifiedAt");
-        if (!allowedSortFields.contains(sortBy)) {
+        if (!ALLOWED_SORT_FIELDS.contains(sortBy)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Collections.emptyList());
-        }
+        }Pageable pageable;
+        List<BoardResponseDto> boards;
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy));
-        List<BoardResponseDto> boards = boardService.findAllByFollowingUsers(loginUser.getId(), pageable);
-        // 기간별 조회 처리
-        if (startDate != null && endDate != null) {
-            boards = boardService.findPostsByFollowingUsersAndPeriod(loginUser.getId(), startDate, endDate, pageable);
-        } else {
-            boards = boardService.findAllByFollowingUsers(loginUser.getId(), pageable);
+        if(sortBy.equals("good")) {
+            pageable = PageRequest.of(page, size);
+            if(startDate != null && endDate != null) {
+                //내가 팔로우한 사람의 게시글을 기간별 좋아요 많은 순 조회
+                boards = boardService.findPostsByFollowingUsersAndPeriodAndGood(loginUser.getId(), startDate,endDate,pageable);
+            }else{
+                //내가 팔로우한  사람의 게시글을 전체기간 좋아요 많은 순 조회
+                boards = boardService.findAllByFollowingUsersAndGood(loginUser.getId(),pageable);
+            }
+        }else{
+            pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy));
+            if(startDate != null && endDate != null) {
+                //팔로우한 사람들의 게시글 기간별 조회
+                boards = boardService.findPostsByFollowingUsersAndPeriod(loginUser.getId(), startDate, endDate, pageable);
+            }else{
+                boards = boardService.findAllByFollowingUsers(loginUser.getId(), pageable);
+            }
         }
 
 
         return ResponseEntity.ok(boards);
     }
+
     //단건조회
     @GetMapping("/{id}")
     public ResponseEntity<BoardResponseDto> findById(@PathVariable Long id) {

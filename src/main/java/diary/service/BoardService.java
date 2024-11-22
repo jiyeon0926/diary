@@ -84,14 +84,14 @@ public class BoardService {
 
 
     public List<BoardResponseDto> findAllByFollowingUsers(Long userId, Pageable pageable) {
-        List<BoardResponseDto> boardResponseDtoList = new ArrayList<>();
+                List<BoardResponseDto> boardResponseDtoList = new ArrayList<>();
 
-        // 게시글 가져오기
-        Page<Board> boardList = boardRepository.findAllByFollowingUsers(userId, pageable);
+                // 게시글 가져오기
+                Page<Board> boardList = boardRepository.findAllByFollowingUsers(userId, pageable);
 
-        // 게시글을 DTO로 변환
-        for (Board board : boardList) {
-            boardResponseDtoList.add(BoardResponseDto.toDto(board));
+                // 게시글을 DTO로 변환
+                for (Board board : boardList) {
+                    boardResponseDtoList.add(BoardResponseDto.toDto(board));
         }
         return boardResponseDtoList;
     }
@@ -163,5 +163,28 @@ public class BoardService {
         return boardResponseDtoList;
     }
 
+    //팔로우한 유저들의 기간별 게시물 좋아요 많은 순 조회
+    public List<BoardResponseDto> findPostsByFollowingUsersAndPeriodAndGood(Long id, LocalDate startDate, LocalDate endDate, Pageable pageable) {
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
+        List<BoardResponseDto> boardResponseDtoList = new ArrayList<>();
 
+        Page<BoardResponseDto> boardList = boardRepository.findByFollowingUsersAndPeriodAndGood(id,startDateTime,endDateTime,pageable);
+        for(BoardResponseDto board : boardList) {
+            boardResponseDtoList.add(board);
+        }
+        return boardResponseDtoList;
+    }
+
+    //팔로우한 유저들의 전체기간 게시물 좋아요 순 조회
+    public List<BoardResponseDto> findAllByFollowingUsersAndGood(Long id, Pageable pageable) {
+        List<BoardResponseDto> boardResponseDtoList = new ArrayList<>();
+
+        // 게시글 가져오기
+        Page<BoardResponseDto> boardList = boardRepository.findAllByFollowingUsersGood(id,pageable);
+        for (BoardResponseDto board : boardList) {
+            boardResponseDtoList.add(board);
+        }
+        return boardResponseDtoList;
+    }
 }
