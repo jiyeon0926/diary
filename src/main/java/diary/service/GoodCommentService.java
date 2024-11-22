@@ -26,6 +26,7 @@ public class GoodCommentService {
         User findUser = userRepository.findByIdElseThrow(userId);
         Comment findComment = commentRepository.findById(commentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
+        // 댓글 쓴 유저 id
         Long commentUserId = findComment.getUser().getId();
 
         // 만약 본인이 쓴 댓글이면 400 상태코드 throw
@@ -72,6 +73,5 @@ public class GoodCommentService {
         } else {
             goodCommentRepository.delete(findGoodComment);
         }
-
     }
 }
