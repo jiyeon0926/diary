@@ -44,7 +44,7 @@ public class BoardService {
 
     //게시물 단건 조회
     public BoardResponseDto findById(Long id) {
-        return BoardResponseDto.toDto(boardRepository.findByIdOrElseThrow(id));
+        return boardRepository.findByIdWhitGoodCountOrElseThrow(id);
     }
 
     //게시물 저장
@@ -87,14 +87,15 @@ public class BoardService {
                 List<BoardResponseDto> boardResponseDtoList = new ArrayList<>();
 
                 // 게시글 가져오기
-                Page<Board> boardList = boardRepository.findAllByFollowingUsers(userId, pageable);
+                Page<BoardResponseDto> boardList = boardRepository.findAllByFollowingUsers(userId, pageable);
 
                 // 게시글을 DTO로 변환
-                for (Board board : boardList) {
-                    boardResponseDtoList.add(BoardResponseDto.toDto(board));
+                for (BoardResponseDto board : boardList) {
+                    boardResponseDtoList.add(board);
         }
         return boardResponseDtoList;
     }
+
 
     public List<BoardResponseDto> findPostsByPeriod(LocalDate startDate, LocalDate endDate, Pageable pageable) {
 
@@ -102,11 +103,11 @@ public class BoardService {
         LocalDateTime startDateTime = startDate.atStartOfDay();
         LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
 
-        List<Board> boards = boardRepository.findByCreatedAtBetween(startDateTime, endDateTime, pageable);
+        Page<BoardResponseDto> boards = boardRepository.findByCreatedAtBetween(startDateTime, endDateTime, pageable);
 
         List<BoardResponseDto> boardResponseDtoList = new ArrayList<>();
-        for (Board board : boards) {
-            boardResponseDtoList.add(BoardResponseDto.toDto(board));
+        for (BoardResponseDto board : boards) {
+            boardResponseDtoList.add(board);
         }
         return boardResponseDtoList;
     }
@@ -115,11 +116,11 @@ public class BoardService {
         LocalDateTime startDateTime = startDate.atStartOfDay();
         LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
 
-        List<Board> boards = boardRepository.findByFollowingUsersAndPeriod(id, startDateTime, endDateTime, pageable);
+        Page<BoardResponseDto> boards = boardRepository.findByFollowingUsersAndPeriod(id, startDateTime, endDateTime, pageable);
 
         List<BoardResponseDto> boardResponseDtoList = new ArrayList<>();
-        for (Board board : boards) {
-            boardResponseDtoList.add(BoardResponseDto.toDto(board));
+        for (BoardResponseDto board : boards) {
+            boardResponseDtoList.add(board);
         }
         return boardResponseDtoList;
     }

@@ -32,7 +32,6 @@ public class BoardController {
 
     private static final List<String> ALLOWED_SORT_FIELDS = Arrays.asList("createdAt", "modifiedAt","good");
 
-    //boards?page=0&size=10
     @GetMapping
     public ResponseEntity<List<BoardResponseDto>> findAll(@Valid
                                                           @RequestParam(defaultValue = "0") int page,
@@ -114,7 +113,7 @@ public class BoardController {
         return ResponseEntity.ok(boards);
     }
 
-    //단건조회
+
     @GetMapping("/{id}")
     public ResponseEntity<BoardResponseDto> findById(@PathVariable Long id) {
         return ResponseEntity.ok().body(boardService.findById(id));
