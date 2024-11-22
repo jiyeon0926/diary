@@ -25,8 +25,10 @@ public class BoardService {
 
     public List<BoardResponseDto> findAll(Pageable pageable) {
         List<BoardResponseDto> boardResponseDtoList = new ArrayList<>();
+
         //JPA에서 제공하는 페이징처리 메소드를 작성한다.
         Page<Board> boardPage = boardRepository.findAll(pageable);
+
         //boardPage객체에서 데이터베이스에서 가져온 데이터를 가져온다
         List<Board> boardList = boardPage.getContent();
 
@@ -62,7 +64,6 @@ public class BoardService {
         if (!board.getUser().getId().equals(user.getId())) {
             throw new IllegalArgumentException("작성자만 수정할 수 있습니다.");
         }
-
         // 게시글 수정
         board.update(requestDto.getTitle(), requestDto.getContent(), requestDto.getWeather(), user);
 
@@ -121,17 +122,6 @@ public class BoardService {
         return boardResponseDtoList;
     }
 
-    //전체 기간의 좋아요 순 정렬
-//    public List<BoardResponseDto> findAllByGood(Pageable pageable) {
-//        List<BoardResponseDto> boardResponseDtoList = new ArrayList<>();
-//
-//        // 게시글 가져오기
-//        Page<BoardResponseDto> boardList = boardRepository.findAllOrderByGoodConut(pageable);
-//        for (Board board : boardList) {
-//            boardResponseDtoList.add(BoardResponseDto.toDto(board));
-//        }
-//        return boardList;
-//    }
 
     public List<BoardResponseDto> findAllByGood(Pageable pageable) {
         List<BoardResponseDto> boardResponseDtoList = new ArrayList<>();
@@ -156,7 +146,6 @@ public class BoardService {
         for (BoardResponseDto board : boardList) {
             boardResponseDtoList.add(board);
         }
-
         return boardResponseDtoList;
     }
 

@@ -1,4 +1,4 @@
-package diary.Exception;
+package diary.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
