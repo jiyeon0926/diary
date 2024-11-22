@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class Follow {
 
     @EmbeddedId
-    private ClassId id;
+    private FollowId id;
 
     @ManyToOne
     @MapsId("followerId")
@@ -33,7 +33,7 @@ public class Follow {
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
-    public Follow(ClassId id, User follower, User followee) {
+    public Follow(FollowId id, User follower, User followee) {
         this.id = id;
         this.follower = follower;
         this.followee = followee;

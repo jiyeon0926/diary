@@ -7,12 +7,12 @@ import java.io.Serializable;
 
 @Embeddable
 @NoArgsConstructor
-public class ClassId implements Serializable {
+public class FollowId implements Serializable {
 
     private Long followerId;
     private Long followeeId;
 
-    public ClassId(Long followerId, Long followeeId) {
+    public FollowId(Long followerId, Long followeeId) {
         this.followerId = followerId;
         this.followeeId = followeeId;
     }

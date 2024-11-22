@@ -1,6 +1,6 @@
 package diary.service;
 
-import diary.entity.ClassId;
+import diary.entity.FollowId;
 import diary.entity.Follow;
 import diary.entity.User;
 import diary.repository.FollowRepository;
@@ -29,11 +29,11 @@ public class FollowService {
         Follow follow = followRepository.findByFollowerAndFollowee(follower.getId(), followee.getId());
 
         if (follower.getId() == followee.getId()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You can't follow yourself.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "자신을 팔로우 할 수 없습니다.");
         }
 
         if (follow == null) {
-            ClassId id = new ClassId(follower.getId(), followee.getId());
+            FollowId id = new FollowId(follower.getId(), followee.getId());
             Follow following = new Follow(id, follower, followee);
 
             followRepository.save(following);
@@ -47,7 +47,7 @@ public class FollowService {
         Follow follow = followRepository.findByFollowerAndFollowee(follower.getId(), followee.getId());
 
         if (follow == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Follow relationship not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "팔로우 관계가 아닙니다.");
         }
 
         followRepository.delete(follow);

@@ -3,7 +3,6 @@ package diary.controller;
 import diary.entity.User;
 import diary.requestDto.CommentRequestDto;
 import diary.responseDto.CommentResponseDto;
-import diary.service.BoardService;
 import diary.service.CommentService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -20,7 +19,6 @@ import java.util.List;
 public class CommentController {
 
     private final CommentService commentService;
-    private final BoardService boardService;
 
     // 댓글 작성
     @PostMapping

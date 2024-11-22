@@ -50,14 +50,14 @@ public class CommentService {
         Comment comment = commentRepository.findCommentByBoardIdAndUserId(boardId, userId, writerId, commentId);
 
         if (comment == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There are no comments written by you.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "작성한 댓글이 없습니다.");
         }
 
         Long commentUserId = comment.getUser().getId();
         Long boardUserId = comment.getBoard().getUser().getId();
 
         if (!commentUserId.equals(userId) && !boardUserId.equals(userId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to edit this comment.");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "댓글을 수정할 권한이 없습니다.");
         }
 
         comment.updateComment(content);
@@ -70,14 +70,14 @@ public class CommentService {
         Comment comment = commentRepository.findCommentByBoardIdAndUserId(boardId, userId, writerId, commentId);
 
         if (comment == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There are no comments written by you.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "작성한 댓글이 없습니다.");
         }
 
         Long commentUserId = comment.getUser().getId();
         Long boardUserId = comment.getBoard().getUser().getId();
 
         if (!commentUserId.equals(userId) && !boardUserId.equals(userId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to delete this comment.");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "댓글을 수정할 권한이 없습니다.");
         }
 
         commentRepository.delete(comment);

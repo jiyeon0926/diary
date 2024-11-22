@@ -47,7 +47,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<String> handleNoSuchElementException(NoSuchElementException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body("error: " + "The post cannot be found.");
+                .body("error: " + ex.getMessage());
     }
 
 }

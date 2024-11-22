@@ -1,6 +1,6 @@
 package diary.repository;
 
-import diary.entity.ClassId;
+import diary.entity.FollowId;
 import diary.entity.Follow;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface FollowRepository extends JpaRepository<Follow, ClassId> {
+public interface FollowRepository extends JpaRepository<Follow, FollowId> {
     Optional<Follow> findByFollowerIdAndFolloweeId(Long followerId, Long followeeId);
 
     // 팔로우 관계 확인
