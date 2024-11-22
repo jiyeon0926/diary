@@ -52,6 +52,7 @@ public class UserController {
         // 비밀번호 확인
         userService.checkPassword(email, password);
 
+        // 비밀번호가 일치하면 세션에 allowResign을 true로 저장
         session.setAttribute("allowResign", true);
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -62,8 +63,10 @@ public class UserController {
 
         HttpSession session = request.getSession();
 
+        // 세션에서 allowResign을 받아옴
         Boolean allowResign = (Boolean) session.getAttribute("allowResign");
 
+        // 만약 allowResign이 없거나 false면 401 상태코드 throw
         if (allowResign == null || !allowResign) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }

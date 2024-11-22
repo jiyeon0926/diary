@@ -18,9 +18,10 @@ public class LoginFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         String requestURI = httpServletRequest.getRequestURI();
+        String method = httpServletRequest.getMethod();
 
-
-        if (!isWhiteList(requestURI)) {
+        // 로그인이 안돼있으면 401실행
+        if (!isWhiteList(requestURI, method)) {
             HttpSession session = httpServletRequest.getSession(false);
 
             // 만약 세션이 비어있다면 401 상태코드 throw
@@ -36,7 +37,15 @@ public class LoginFilter implements Filter {
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
-    private boolean isWhiteList(String requestURI) {
+    // 화이트리스트거나 게시글 조회
+    private boolean isWhiteList(String requestURI, String method) {
+
+        // 게시글 조회할 때는 로그인 없이 가능
+        if (PatternMatchUtils.simpleMatch(new String[]{"/boards", "/boards/*"}, requestURI) && method.equals("GET")) {
+            return true;
+        }
+
         return PatternMatchUtils.simpleMatch(WHITE_LIST, requestURI);
     }
+
 }

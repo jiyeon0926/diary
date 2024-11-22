@@ -39,7 +39,7 @@ public class CommentService {
 
     // 댓글 조회
     public List<CommentResponseDto> findAllByBoardId(Long boardId) {
-        return commentRepository.findAllByBoardIdOrderByModifiedAt(boardId).stream()
+        return commentRepository.findAllByBoardIdOrderByModifiedAtDesc(boardId).stream()
                 .map(CommentResponseDto::toDto)
                 .toList();
     }
