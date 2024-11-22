@@ -28,7 +28,7 @@ public class BoardService {
 
     public List<BoardResponseDto> findAll(Pageable pageable) {
         List<BoardResponseDto> boardResponseDtoList = new ArrayList<>();
-       //JPA에서 제공하는 페이징처리 메소드를 작성한다.
+        //JPA에서 제공하는 페이징처리 메소드를 작성한다.
         Page<Board> boardPage = boardRepository.findAll(pageable);
         //boardPage객체에서 데이터베이스에서 가져온 데이터를 가져온다
         List<Board> boardList = boardPage.getContent();
@@ -42,21 +42,22 @@ public class BoardService {
         return boardResponseDtoList;
     }
 
+    //게시물 단건 조회
     public BoardResponseDto findById(Long id) {
         return BoardResponseDto.toDto(boardRepository.findByIdOrElseThrow(id));
     }
 
-
-
+    //게시물 저장
     @Transactional
-    public BoardResponseDto saveBoard(CreateBoardRequestDto requestDto,User user) {
-         Board board = new Board(requestDto.getTitle(),requestDto.getContent(),requestDto.getWeather(),user);
-         Board savedBoard = boardRepository.save(board);
-         return BoardResponseDto.toDto(savedBoard);
+    public BoardResponseDto saveBoard(CreateBoardRequestDto requestDto, User user) {
+        Board board = new Board(requestDto.getTitle(), requestDto.getContent(), requestDto.getWeather(), user);
+        Board savedBoard = boardRepository.save(board);
+        return BoardResponseDto.toDto(savedBoard);
     }
 
+    //게시물 업데이트
     @Transactional
-    public BoardResponseDto update(Long id, CreateBoardRequestDto requestDto,User user) {
+    public BoardResponseDto update(Long id, CreateBoardRequestDto requestDto, User user) {
         // Optional 처리
         Board board = boardRepository.findByIdOrElseThrow(id);
 
@@ -72,43 +73,30 @@ public class BoardService {
         return BoardResponseDto.toDto(board);
     }
 
-    public void delete(Long id,User user) {
+    //게시물 삭제
+    public void delete(Long id, User user) {
         Board board = boardRepository.findByIdOrElseThrow(id);
         if (!board.getUser().getId().equals(user.getId())) {
             throw new IllegalArgumentException("작성자만 삭제 할 수 있습니다.");
         }
-
         boardRepository.deleteById(id);
     }
 
-    public List<BoardResponseDto> findAllByFollowingUsers(List<FollowResponseDto> followingUserIds, Pageable pageable) {
+
+    public List<BoardResponseDto> findAllByFollowingUsers(Long userId, Pageable pageable) {
         List<BoardResponseDto> boardResponseDtoList = new ArrayList<>();
 
         // 게시글 가져오기
-        Page<Board> boardPage = boardRepository.findAllByUserIdIn(followingUserIds, pageable);
+        Page<Board> boardList = boardRepository.findAllByFollowingUsers(userId, pageable);
 
         // 게시글을 DTO로 변환
-        for (Board board : boardPage.getContent()) {
-            boardResponseDtoList.add(BoardResponseDto.toDto(board));
-        }
-
-        return boardResponseDtoList;
-    }
-
-    public List<BoardResponseDto> findAllByFollowingUsersTest(Long userId, Pageable pageable) {
-        List<BoardResponseDto> boardResponseDtoList = new ArrayList<>();
-
-        // 게시글 가져오기
-        Page<Board> boardList = boardRepository.findAllByFollowingUsers(userId,pageable);
-
-        // 게시글을 DTO로 변환
-       for (Board board : boardList) {
+        for (Board board : boardList) {
             boardResponseDtoList.add(BoardResponseDto.toDto(board));
         }
         return boardResponseDtoList;
     }
 
-    public List<BoardResponseDto> findPostsByPeriod(LocalDate startDate, LocalDate endDate,Pageable pageable) {
+    public List<BoardResponseDto> findPostsByPeriod(LocalDate startDate, LocalDate endDate, Pageable pageable) {
 
         // LocalDate를 LocalDateTime으로 변환
         LocalDateTime startDateTime = startDate.atStartOfDay();
@@ -135,5 +123,45 @@ public class BoardService {
         }
         return boardResponseDtoList;
     }
+
+    //전체 기간의 좋아요 순 정렬
+//    public List<BoardResponseDto> findAllByGood(Pageable pageable) {
+//        List<BoardResponseDto> boardResponseDtoList = new ArrayList<>();
+//
+//        // 게시글 가져오기
+//        Page<BoardResponseDto> boardList = boardRepository.findAllOrderByGoodConut(pageable);
+//        for (Board board : boardList) {
+//            boardResponseDtoList.add(BoardResponseDto.toDto(board));
+//        }
+//        return boardList;
+//    }
+
+    public List<BoardResponseDto> findAllByGood(Pageable pageable) {
+        List<BoardResponseDto> boardResponseDtoList = new ArrayList<>();
+
+        // 게시글 가져오기
+        Page<BoardResponseDto> boardList = boardRepository.findAllOrderByGoodConut(pageable);
+        for (BoardResponseDto board : boardList) {
+            boardResponseDtoList.add(board);
+        }
+        return boardResponseDtoList;
+    }
+
+    //특정기간의 좋아요 순 정렬
+    public List<BoardResponseDto> findPostsByPeriodAndGood(LocalDate startDate, LocalDate endDate, Pageable pageable) {
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
+        List<BoardResponseDto> boardResponseDtoList = new ArrayList<>();
+
+        // 게시글 가져오기
+        Page<BoardResponseDto> boardList = boardRepository.findPostsByPeriodAndGood(startDateTime,endDateTime,pageable);
+
+        for (BoardResponseDto board : boardList) {
+            boardResponseDtoList.add(board);
+        }
+
+        return boardResponseDtoList;
+    }
+
 
 }

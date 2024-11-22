@@ -44,15 +44,27 @@ public class BoardController {
         if (!ALLOWED_SORT_FIELDS.contains(sortBy)) {
             throw new IllegalArgumentException(sortBy + "는(은) 사용할 수 없는 정렬값입니다: ");
         }
-        Pageable pageables = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy));
-
-        // 서비스 호출
+        // Pageable 객체 생성
+        Pageable pageable;
         List<BoardResponseDto> boards;
-        if (startDate != null && endDate != null) {
-            boards = boardService.findPostsByPeriod(startDate, endDate, pageables);
+
+        // 좋아요 순 정렬
+        if (sortBy.equals("good")) {
+            pageable = PageRequest.of(page, size);
+            if (startDate != null && endDate != null) {
+                boards = boardService.findPostsByPeriodAndGood(startDate, endDate, pageable); // 좋아요 + 기간 필터링
+            } else {
+                boards = boardService.findAllByGood(pageable); // 좋아요 순 정렬
+            }
         } else {
-            boards = boardService.findAll(pageables);
+            pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy));
+            if (startDate != null && endDate != null) {
+                boards = boardService.findPostsByPeriod(startDate, endDate, pageable); // 기간 필터링
+            } else {
+                boards = boardService.findAll(pageable); // 기본 정렬
+            }
         }
+
         return ResponseEntity.ok().body(boards);
     }
 
@@ -64,6 +76,7 @@ public class BoardController {
                                                                   @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
                                                                   @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
                                                                   HttpServletRequest reqeust) {
+
         HttpSession session = reqeust.getSession();
         User loginUser = (User) session.getAttribute("loginUser");
 
@@ -79,12 +92,12 @@ public class BoardController {
         }
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy));
-        List<BoardResponseDto> boards = boardService.findAllByFollowingUsersTest(loginUser.getId(), pageable);
+        List<BoardResponseDto> boards = boardService.findAllByFollowingUsers(loginUser.getId(), pageable);
         // 기간별 조회 처리
         if (startDate != null && endDate != null) {
             boards = boardService.findPostsByFollowingUsersAndPeriod(loginUser.getId(), startDate, endDate, pageable);
         } else {
-            boards = boardService.findAllByFollowingUsersTest(loginUser.getId(), pageable);
+            boards = boardService.findAllByFollowingUsers(loginUser.getId(), pageable);
         }
 
 

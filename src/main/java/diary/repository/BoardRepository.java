@@ -1,6 +1,7 @@
 package diary.repository;
 
 import diary.entity.Board;
+import diary.responseDto.BoardResponseDto;
 import diary.responseDto.FollowResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,5 +34,12 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     default Board findByIdOrElseThrow(Long id){
         return findById(id).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND, "찾을 수 없는 아이디 값입니다."+id));
     }
+
+    @Query("SELECT new diary.responseDto.BoardResponseDto(b.id, b.title, b.content, b.weather,b.createdAt,b.modifiedAt, COUNT(gb.board.id))  FROM Board b LEFT JOIN GoodBoard  gb ON b.id = gb.board.id GROUP BY b.id ORDER BY COUNT(gb.board.id) DESC")
+    Page<BoardResponseDto> findAllOrderByGoodConut(Pageable pageable);
+
+    @Query("SELECT new diary.responseDto.BoardResponseDto(b.id, b.title, b.content, b.weather,b.createdAt,b.modifiedAt, COUNT(gb.board.id)) FROM Board b LEFT JOIN GoodBoard  gb ON b.id = gb.board.id WHERE b.createdAt BETWEEN :startDate AND :endDate GROUP BY b.id ORDER BY COUNT(gb.id) DESC")
+    Page<BoardResponseDto> findPostsByPeriodAndGood(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate,Pageable pageable);
+
 
 }

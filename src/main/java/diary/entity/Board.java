@@ -3,6 +3,8 @@ package diary.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.util.List;
+
 
 @Getter
 @Entity
@@ -40,6 +42,11 @@ public class Board  extends Base{
     public void setUser(){
         this.user = new User();
     }
+
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<GoodBoard> goodBoards; // GoodBoard와의 관계
+
 
 
     public void update(String title, String content, String weather,User user) {
