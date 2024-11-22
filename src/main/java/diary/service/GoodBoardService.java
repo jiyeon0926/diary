@@ -19,7 +19,7 @@ public class GoodBoardService {
     BoardRepository boardRepository;
     UserRepository userRepository;
 
-    // 좋아요
+    // 게시글에 좋아요
     public void doGood(Long userId, Long boardId) {
 
         // 유저 찾기, 게시글 찾기
@@ -48,7 +48,7 @@ public class GoodBoardService {
         }
     }
 
-    // 좋아요 취소
+    // 게시글에 좋아요 취소
     public void undoGood(Long userId, Long boardId) {
 
         // 게시글 찾기

@@ -1,5 +1,6 @@
 package diary.controller;
 
+import diary.entity.User;
 import diary.responseDto.FollowResponseDto;
 import diary.responseDto.FollowerResponseDto;
 import diary.service.FollowService;
@@ -21,14 +22,14 @@ public class FollowController {
     // 팔로우
     @PostMapping("/following")
     public ResponseEntity<Void> follow(@PathVariable Long userId, HttpSession session) {
-        followService.follow(session, userId);
+        followService.follow((User) session.getAttribute("loginUser"), userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     // 팔로우 취소
     @DeleteMapping("/following")
     public ResponseEntity<Void> unfollow(@PathVariable Long userId, HttpSession session) {
-        followService.unfollow(session, userId);
+        followService.unfollow((User) session.getAttribute("loginUser"), userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

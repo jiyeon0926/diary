@@ -7,7 +7,6 @@ import diary.repository.FollowRepository;
 import diary.repository.ProfileRepository;
 import diary.responseDto.FollowResponseDto;
 import diary.responseDto.FollowerResponseDto;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -24,10 +23,7 @@ public class FollowService {
     private final FollowRepository followRepository;
 
     // 팔로잉
-    public void follow(HttpSession session, Long followeeId) {
-        // 팔로우 하는 사람
-        User follower = (User) session.getAttribute("loginUser");
-
+    public void follow(User follower, Long followeeId) {
         // 팔로우 대상이 존재하는 확인
         User followee = profileRepository.findUserByidOrElseThrow(followeeId);
 
@@ -48,9 +44,7 @@ public class FollowService {
     }
 
     // 팔로잉 취소
-    public void unfollow(HttpSession session, Long followeeId) {
-        User follower = (User) session.getAttribute("loginUser");
-
+    public void unfollow(User follower, Long followeeId) {
         User followee = profileRepository.findUserByidOrElseThrow(followeeId);
 
         // 팔로우 관계인지 확인
