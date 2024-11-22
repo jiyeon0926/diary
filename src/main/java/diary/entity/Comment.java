@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Table(name = "comment")
@@ -27,6 +29,9 @@ public class Comment extends Base {
     @JoinColumn(name = "user_id")
     @Setter
     private User user;
+
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
+    private List<GoodComment> goodComment;
 
     public Comment(String content) {
         this.content = content;
