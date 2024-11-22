@@ -1,7 +1,7 @@
 package diary.controller;
 
-import diary.requestDto.ProfileRequestDto;
-import diary.responseDto.ProfileResponseDto;
+import diary.controller.dto.ProfileRequestDto;
+import diary.controller.dto.ProfileResponseDto;
 import diary.service.ProfileService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

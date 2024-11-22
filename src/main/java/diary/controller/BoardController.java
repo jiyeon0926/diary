@@ -1,8 +1,8 @@
 package diary.controller;
 
 import diary.entity.User;
-import diary.requestDto.CreateBoardRequestDto;
-import diary.responseDto.BoardResponseDto;
+import diary.controller.dto.CreateBoardRequestDto;
+import diary.controller.dto.BoardResponseDto;
 import diary.service.BoardService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;

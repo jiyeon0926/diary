@@ -1,6 +1,6 @@
 package diary.config;
 
-import diary.Filter.LoginFilter;
+import diary.filter.LoginFilter;
 import jakarta.servlet.Filter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;

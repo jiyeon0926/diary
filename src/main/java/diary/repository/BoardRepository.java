@@ -1,7 +1,7 @@
 package diary.repository;
 
 import diary.entity.Board;
-import diary.responseDto.BoardResponseDto;
+import diary.controller.dto.BoardResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -3,7 +3,7 @@ package diary.service;
 import diary.config.PasswordEncoder;
 import diary.entity.User;
 import diary.repository.UserRepository;
-import diary.responseDto.LoginResponseDto;
+import diary.controller.dto.LoginResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
