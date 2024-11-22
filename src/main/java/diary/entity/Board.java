@@ -32,7 +32,6 @@ public class Board  extends Base{
     private List<Comment> comments;
 
     public Board(){
-
     }
 
     public Board(String title, String content, String weather,User user) {

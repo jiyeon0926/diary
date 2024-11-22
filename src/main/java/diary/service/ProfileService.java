@@ -5,12 +5,10 @@ import diary.entity.User;
 import diary.repository.ProfileRepository;
 import diary.requestDto.ProfileRequestDto;
 import diary.responseDto.ProfileResponseDto;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Optional;
 
 @Service
 public class ProfileService {

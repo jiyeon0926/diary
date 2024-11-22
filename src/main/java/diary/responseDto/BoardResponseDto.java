@@ -1,9 +1,7 @@
 package diary.responseDto;
 
 import diary.entity.Board;
-import jakarta.persistence.ExcludeDefaultListeners;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

@@ -16,4 +16,5 @@ public class PasswordEncoder {
         BCrypt.Result result = BCrypt.verifyer().verify(rawPassword.toCharArray(), encodedPassword);
         return result.verified;
     }
+
 }

@@ -4,7 +4,6 @@ import diary.entity.User;
 import diary.requestDto.CreateBoardRequestDto;
 import diary.responseDto.BoardResponseDto;
 import diary.service.BoardService;
-import diary.service.FollowService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -28,7 +27,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardController {
     private final BoardService boardService;
-    private final FollowService followService;
 
     private static final List<String> ALLOWED_SORT_FIELDS = Arrays.asList("createdAt", "modifiedAt","good");
 
@@ -63,7 +61,6 @@ public class BoardController {
                 boards = boardService.findAll(pageable); // 기본 정렬
             }
         }
-
         return ResponseEntity.ok().body(boards);
     }
 
@@ -108,8 +105,6 @@ public class BoardController {
                 boards = boardService.findAllByFollowingUsers(loginUser.getId(), pageable);
             }
         }
-
-
         return ResponseEntity.ok(boards);
     }
 
@@ -127,7 +122,7 @@ public class BoardController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<BoardResponseDto> update(@PathVariable Long id, @RequestBody CreateBoardRequestDto requestDto, HttpServletRequest request) {
+    public ResponseEntity<BoardResponseDto> update( @PathVariable Long id,@Valid @RequestBody CreateBoardRequestDto requestDto, HttpServletRequest request) {
         HttpSession session = request.getSession();
         User loginUser = (User) session.getAttribute("loginUser");
         return ResponseEntity.ok().body(boardService.update(id, requestDto, loginUser));

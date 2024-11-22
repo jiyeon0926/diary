@@ -2,7 +2,6 @@ package diary.controller;
 
 import diary.entity.User;
 import diary.requestDto.CommentRequestDto;
-import diary.responseDto.BoardResponseDto;
 import diary.responseDto.CommentResponseDto;
 import diary.service.BoardService;
 import diary.service.CommentService;

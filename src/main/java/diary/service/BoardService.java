@@ -3,10 +3,8 @@ package diary.service;
 import diary.entity.Board;
 import diary.entity.User;
 import diary.repository.BoardRepository;
-import diary.repository.ProfileRepository;
 import diary.requestDto.CreateBoardRequestDto;
 import diary.responseDto.BoardResponseDto;
-import diary.responseDto.FollowResponseDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,7 +21,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class BoardService {
-    private final ProfileRepository profileRepository;
     private final BoardRepository boardRepository;
 
     public List<BoardResponseDto> findAll(Pageable pageable) {
