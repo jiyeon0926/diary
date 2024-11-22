@@ -43,7 +43,6 @@ public class Board  extends Base{
         this.user = new User();
     }
 
-
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GoodBoard> goodBoards; // GoodBoard와의 관계
 

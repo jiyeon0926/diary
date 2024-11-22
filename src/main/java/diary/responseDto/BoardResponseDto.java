@@ -1,7 +1,9 @@
 package diary.responseDto;
 
 import diary.entity.Board;
+import jakarta.persistence.ExcludeDefaultListeners;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -16,7 +18,7 @@ public class BoardResponseDto {
     private final String weather;
     private final LocalDateTime createdAt;
     private final LocalDateTime modifiedAt;
-    private Long likeCount;
+    private Long likeCount=0L;
 
 
     public static BoardResponseDto toDto(Board board) {

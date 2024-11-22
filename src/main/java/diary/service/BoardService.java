@@ -69,8 +69,7 @@ public class BoardService {
         // 게시글 수정
         board.update(requestDto.getTitle(), requestDto.getContent(), requestDto.getWeather(), user);
 
-        // 수정된 게시글을 DTO로 변환하여 반환
-        return BoardResponseDto.toDto(board);
+        return boardRepository.findByIdWhitGoodCountOrElseThrow(id);
     }
 
     //게시물 삭제

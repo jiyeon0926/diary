@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
+
     //팔로우 하고있는 유저의 게시글 전체 조회
     @Query("SELECT new diary.responseDto.BoardResponseDto(b.id, b.title, b.content, b.weather, b.createdAt, b.modifiedAt, COUNT(gb.board.id)) FROM Board b " +
             "LEFT JOIN GoodBoard gb ON b.id = gb.board.id " +
@@ -39,7 +40,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     default Board findByIdOrElseThrow(Long id){
         return findById(id).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND, "찾을 수 없는 아이디 값입니다."+id));
     }
-
 
     @Query("SELECT new diary.responseDto.BoardResponseDto(" +
             "b.id, b.title, b.content, b.weather, b.createdAt, b.modifiedAt, COUNT(gb.board.id)) " +
