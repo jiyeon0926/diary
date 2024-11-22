@@ -2,6 +2,7 @@ package diary.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -9,6 +10,7 @@ import java.util.List;
 @Getter
 @Entity
 @Table(name="board")
+@NoArgsConstructor
 public class Board  extends Base{
 
     @Id
@@ -31,8 +33,7 @@ public class Board  extends Base{
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<Comment> comments;
 
-    public Board(){
-    }
+
 
     public Board(String title, String content, String weather,User user) {
         this.title = title;
@@ -47,7 +48,6 @@ public class Board  extends Base{
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GoodBoard> goodBoards; // GoodBoard와의 관계
-
 
 
     public void update(String title, String content, String weather,User user) {

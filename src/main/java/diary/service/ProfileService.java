@@ -44,7 +44,6 @@ public class ProfileService {
         userProfile.setPassword(passwordEncoder.encode(profileRequestDto.getPassword()));
         profileRepository.save(userProfile);
     }
-
     // 프로필 변경
     private void updateProfile(Long id, ProfileRequestDto profileRequestDto){
         User userProfile = profileRepository.findById(id).orElseThrow(() -> new RuntimeException("User profile not found"));

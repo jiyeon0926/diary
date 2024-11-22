@@ -53,9 +53,10 @@ public class CommentService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "작성한 댓글이 없습니다.");
         }
 
-        Long commentUserId = comment.getUser().getId();
-        Long boardUserId = comment.getBoard().getUser().getId();
+        Long commentUserId = comment.getUser().getId(); // 댓글 작성자
+        Long boardUserId = comment.getBoard().getUser().getId(); // 게시글 작성자
 
+        // 댓글 작성자가 아니거나 게시글 작성자가 아니면 댓글 수정 권한 없음
         if (!commentUserId.equals(userId) && !boardUserId.equals(userId)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "댓글을 수정할 권한이 없습니다.");
         }
@@ -73,9 +74,10 @@ public class CommentService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "작성한 댓글이 없습니다.");
         }
 
-        Long commentUserId = comment.getUser().getId();
-        Long boardUserId = comment.getBoard().getUser().getId();
+        Long commentUserId = comment.getUser().getId(); // 댓글 작성자
+        Long boardUserId = comment.getBoard().getUser().getId(); // 게시글 작성자
 
+        // 댓글 작성자가 아니거나 게시글 작성자가 아니면 댓글 삭제 권한 없음
         if (!commentUserId.equals(userId) && !boardUserId.equals(userId)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "댓글을 수정할 권한이 없습니다.");
         }

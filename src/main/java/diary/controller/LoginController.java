@@ -5,6 +5,7 @@ import diary.requestDto.LoginRequestDto;
 import diary.responseDto.LoginResponseDto;
 import diary.service.LoginService;
 import diary.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +25,9 @@ public class LoginController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<Void> login(@RequestBody LoginRequestDto loginRequestDto, HttpSession session) {
+    public ResponseEntity<Void> login(
+            @RequestBody LoginRequestDto loginRequestDto, HttpServletRequest request
+    ) {
         
         // 이메일과 비밀번호를 받아서 db에 저장된 user 컬럼(객체)을 가져온다
         LoginResponseDto loginResponseDto = loginService.login(loginRequestDto.getEmail(), loginRequestDto.getPassword());
@@ -36,6 +39,9 @@ public class LoginController {
         if (userId == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
+        // session 생성
+        HttpSession session = request.getSession();
 
         // 회원정보를 가져옴
         User loginUser = userService.findById(userId);

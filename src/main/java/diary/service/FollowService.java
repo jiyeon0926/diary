@@ -24,10 +24,13 @@ public class FollowService {
 
     // 팔로잉
     public void follow(User follower, Long followeeId) {
+        // 팔로우 대상이 존재하는 확인
         User followee = profileRepository.findUserByidOrElseThrow(followeeId);
 
+        // 팔로우 관계인지 확인
         Follow follow = followRepository.findByFollowerAndFollowee(follower.getId(), followee.getId());
 
+        // 자기 자신을 팔로우 할 수 없음
         if (follower.getId() == followee.getId()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "자신을 팔로우 할 수 없습니다.");
         }
@@ -44,6 +47,7 @@ public class FollowService {
     public void unfollow(User follower, Long followeeId) {
         User followee = profileRepository.findUserByidOrElseThrow(followeeId);
 
+        // 팔로우 관계인지 확인
         Follow follow = followRepository.findByFollowerAndFollowee(follower.getId(), followee.getId());
 
         if (follow == null) {
