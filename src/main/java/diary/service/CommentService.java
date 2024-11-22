@@ -46,8 +46,8 @@ public class CommentService {
 
     // 댓글 수정
     @Transactional
-    public CommentResponseDto updateComment(Long boardId, Long userId, String content) {
-        Comment comment = commentRepository.findCommentByBoardIdAndUserId(boardId, userId);
+    public CommentResponseDto updateComment(Long boardId, Long commentId, Long userId, Long writerId, String content) {
+        Comment comment = commentRepository.findCommentByBoardIdAndUserId(boardId, userId, writerId, commentId);
 
         if (comment == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There are no comments written by you.");
@@ -57,7 +57,7 @@ public class CommentService {
         Long boardUserId = comment.getBoard().getUser().getId(); // 게시글 작성자
 
         // 댓글 작성자가 아니거나 게시글 작성자가 아니면 댓글 수정 권한 없음
-        if (!commentUserId.equals(userId) || !boardUserId.equals(userId)) {
+        if (!commentUserId.equals(userId) && !boardUserId.equals(userId)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to edit this comment.");
         }
 
@@ -67,19 +67,27 @@ public class CommentService {
     }
 
     // 댓글 삭제
-    public void deleteComment(Long boardId, Long id, Long userId) {
-        // 댓글 작성자
-        Comment comment = commentRepository.findCommentByIdOrElseThrow(id);
-        Long commentId = comment.getUser().getId();
+    public void deleteComment(Long boardId, Long commentId, Long userId, Long writerId) {
+        Comment comment = commentRepository.findCommentByBoardIdAndUserId(boardId, userId, writerId, commentId);
 
-        // 게시글 작성자
-        Board board = boardRepository.findByIdOrElseThrow(boardId);
-        Long writerId = board.getUser().getId();
+        if (comment == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There are no comments written by you.");
+        }
 
-        if (!commentId.equals(userId) && !writerId.equals(userId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to delete comments.");
+        Long commentUserId = comment.getUser().getId(); // 댓글 작성자
+        Long boardUserId = comment.getBoard().getUser().getId(); // 게시글 작성자
+
+        // 댓글 작성자가 아니거나 게시글 작성자가 아니면 댓글 삭제 권한 없음
+        if (!commentUserId.equals(userId) && !boardUserId.equals(userId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to delete this comment.");
         }
 
         commentRepository.delete(comment);
+    }
+
+    // 작성자 조회
+    public Long findUserIdByBoardId(Long id) {
+        Optional<Board> board = boardRepository.findById(id);
+        return board.get().getUser().getId();
     }
 }

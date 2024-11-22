@@ -2,7 +2,9 @@ package diary.controller;
 
 import diary.entity.User;
 import diary.requestDto.CommentRequestDto;
+import diary.responseDto.BoardResponseDto;
 import diary.responseDto.CommentResponseDto;
+import diary.service.BoardService;
 import diary.service.CommentService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -19,6 +21,7 @@ import java.util.List;
 public class CommentController {
 
     private final CommentService commentService;
+    private final BoardService boardService;
 
     // 댓글 작성
     @PostMapping
@@ -44,8 +47,9 @@ public class CommentController {
                                                             @Valid @RequestBody CommentRequestDto requestDto,
                                                             HttpSession session) {
         User user = (User) session.getAttribute("loginUser");
+        Long writerId = commentService.findUserIdByBoardId(boardId);
 
-        CommentResponseDto responseDto = commentService.updateComment(boardId, user.getId(), requestDto.getContent());
+        CommentResponseDto responseDto = commentService.updateComment(boardId, commentId, user.getId(), writerId, requestDto.getContent());
 
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
@@ -56,8 +60,9 @@ public class CommentController {
                                               @PathVariable Long commentId,
                                               HttpSession session) {
         User user = (User) session.getAttribute("loginUser");
+        Long writerId = commentService.findUserIdByBoardId(boardId);
 
-        commentService.deleteComment(boardId, commentId, user.getId());
+        commentService.deleteComment(boardId, commentId, user.getId(), writerId);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
