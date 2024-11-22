@@ -10,6 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -40,6 +41,13 @@ public class GlobalExceptionHandler {
         error.put("error", ex.getMessage());
         return error;
 
+    }
+
+    // NoSuchElementException 처리
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<String> handleNoSuchElementException(NoSuchElementException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("error: " + "The post cannot be found.");
     }
 
 }
