@@ -29,6 +29,7 @@ public class GoodBoardController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    // 게시물에 좋아요 누른거 취소
     @DeleteMapping()
     public ResponseEntity<Void> unGoodBoard(@PathVariable Long boardId, HttpSession session) {
 
