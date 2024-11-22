@@ -15,7 +15,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -31,7 +30,7 @@ public class BoardController {
     private final BoardService boardService;
     private final FollowService followService;
 
-    private static final List<String> ALLOWED_SORT_FIELDS = Arrays.asList("createdAt", "modifiedAt");
+    private static final List<String> ALLOWED_SORT_FIELDS = Arrays.asList("createdAt", "modifiedAt","good");
 
     //boards?page=0&size=10
     @GetMapping
