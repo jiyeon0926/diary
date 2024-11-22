@@ -28,6 +28,9 @@ public class Board  extends Base{
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
+    private List<Comment> comments;
+
     public Board(){
 
     }
