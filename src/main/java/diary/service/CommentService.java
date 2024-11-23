@@ -6,7 +6,7 @@ import diary.entity.User;
 import diary.repository.BoardRepository;
 import diary.repository.CommentRepository;
 import diary.repository.ProfileRepository;
-import diary.responseDto.CommentResponseDto;
+import diary.controller.dto.CommentResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

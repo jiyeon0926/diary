@@ -1,4 +1,4 @@
-package diary.requestDto;
+package diary.controller.dto;
 
 import lombok.Getter;
 

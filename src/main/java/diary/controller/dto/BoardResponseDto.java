@@ -1,4 +1,4 @@
-package diary.responseDto;
+package diary.controller.dto;
 
 import diary.entity.Board;
 import lombok.AllArgsConstructor;

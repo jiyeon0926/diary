@@ -1,8 +1,8 @@
 package diary.controller;
 
 import diary.entity.User;
-import diary.responseDto.FollowResponseDto;
-import diary.responseDto.FollowerResponseDto;
+import diary.controller.dto.FollowResponseDto;
+import diary.controller.dto.FollowerResponseDto;
 import diary.service.FollowService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
