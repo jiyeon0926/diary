@@ -1,6 +1,7 @@
 package diary.service;
 
 import diary.config.PasswordEncoder;
+import diary.controller.dto.PasswordRequestDto;
 import diary.entity.User;
 import diary.repository.ProfileRepository;
 import diary.controller.dto.ProfileRequestDto;
@@ -26,15 +27,11 @@ public class ProfileService {
         return new ProfileResponseDto(user);
     }
     
-    // 비밀번호 확인 후 프로필 변경
-    public void updatePasswordById(Long id, ProfileRequestDto profileRequestDto){
-        User user = profileRepository.findById(id).orElseThrow(() -> new RuntimeException("User profile not found"));
-
-        if(checkPassword(id, profileRequestDto)){
+    // 비밀번호 확인 후
+    public void comparePassword(Long id, PasswordRequestDto passwordRequestDto){
+        if(checkPassword(id, passwordRequestDto)){
             throw new ResponseStatusException(HttpStatusCode.valueOf(400), "비밀번호가 틀렸습니다.");
         }
-        // 프로필 변경
-        updateProfile(id, profileRequestDto);
     }
 
     // ID로 프로필 변경
@@ -44,21 +41,15 @@ public class ProfileService {
         userProfile.setPassword(passwordEncoder.encode(profileRequestDto.getPassword()));
         profileRepository.save(userProfile);
     }
-    // 프로필 변경
-    private void updateProfile(Long id, ProfileRequestDto profileRequestDto){
-        User userProfile = profileRepository.findById(id).orElseThrow(() -> new RuntimeException("User profile not found"));
-        userProfile.setUsername(profileRequestDto.getUsername());
-        profileRepository.save(userProfile);
-    }
 
     //인코딩된 암호로 사용자 확인
-    private boolean checkPassword(Long id, ProfileRequestDto profileRequestDto) {
+    private boolean checkPassword(Long id, PasswordRequestDto passwordRequestDto) {
         // oldPassword 는 DB에 저장된 값, newPassword는 RequestBody 에서 수신한 값
         User user = profileRepository.findUserByidOrElseThrow(id);
         String oldPassword = user.getPassword();
 
         // URL RequestBody에서 가져온 password
-        String newPassword = profileRequestDto.getPassword();
+        String newPassword = passwordRequestDto.getPassword();
 
         if(passwordEncoder.matches(newPassword, oldPassword)){
             return false;
