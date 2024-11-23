@@ -1,8 +1,8 @@
 package diary.controller;
 
-import diary.entity.User;
 import diary.controller.dto.LoginRequestDto;
 import diary.controller.dto.LoginResponseDto;
+import diary.entity.User;
 import diary.service.LoginService;
 import diary.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 @Slf4j
 @RestController
@@ -37,7 +38,7 @@ public class LoginController {
 
         // 만약 id가 null이면 회원가입하지 않음
         if (userId == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다.");
         }
 
         // session 생성

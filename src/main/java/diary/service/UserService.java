@@ -67,6 +67,14 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "등록된 회원이 아닙니다.");
         }
 
+        // 이미 탈퇴한 회원인지 체크
+        boolean isValid = optionalUser.get().getIsValid();
+
+        // 탈퇴한 회원으로 로그인하는 경우 400 상태코드 throw
+        if (!isValid) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 탈퇴한 회원입니다.");
+        }
+
         // 유저가 있으면 유저를 반환
         return optionalUser.get();
     }

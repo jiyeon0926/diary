@@ -7,6 +7,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 public interface ProfileRepository extends JpaRepository<User, Long> {
     default User findUserByidOrElseThrow(Long id) {
-        return findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Does not exist id = " + id));
+        return findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "등록된 회원이 아닙니다."));
     }
 }
