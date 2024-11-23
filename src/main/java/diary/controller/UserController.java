@@ -1,8 +1,8 @@
 package diary.controller;
 
 import diary.entity.User;
-import diary.controller.dto.LoginRequestDto;
-import diary.controller.dto.SignupRequestDto;
+import diary.requestDto.LoginRequestDto;
+import diary.requestDto.SignupRequestDto;
 import diary.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;

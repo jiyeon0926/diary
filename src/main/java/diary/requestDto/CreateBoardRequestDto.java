@@ -1,4 +1,4 @@
-package diary.controller.dto;
+package diary.requestDto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

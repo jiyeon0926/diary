@@ -1,4 +1,4 @@
-package diary.controller.dto;
+package diary.requestDto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import jakarta.validation.constraints.NotNull;

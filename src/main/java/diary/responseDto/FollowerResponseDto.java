@@ -1,4 +1,4 @@
-package diary.controller.dto;
+package diary.responseDto;
 
 import diary.entity.Follow;
 import lombok.Getter;

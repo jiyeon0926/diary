@@ -1,8 +1,8 @@
 package diary.controller;
 
 import diary.entity.User;
-import diary.controller.dto.CommentRequestDto;
-import diary.controller.dto.CommentResponseDto;
+import diary.requestDto.CommentRequestDto;
+import diary.responseDto.CommentResponseDto;
 import diary.service.CommentService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
