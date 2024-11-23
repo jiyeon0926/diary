@@ -3,12 +3,14 @@ package diary.controller;
 import diary.controller.dto.PasswordRequestDto;
 import diary.controller.dto.ProfileRequestDto;
 import diary.controller.dto.ProfileResponseDto;
+import diary.entity.User;
 import diary.service.ProfileService;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @AllArgsConstructor
@@ -35,13 +37,18 @@ public class ProfileController {
     @PatchMapping
     public ResponseEntity<Void> updateById(@PathVariable Long id, @RequestBody ProfileRequestDto profileRequestDto, HttpSession session){
         Boolean allowUpdate = (Boolean) session.getAttribute("allowUpdate");
+        User loginUser = (User) session.getAttribute("loginUser");
 
         if (allowUpdate == null || !allowUpdate) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        profileService.updateById(id, profileRequestDto);
-        session.setAttribute("allowUpdate", false);
+        if (!loginUser.getId().equals(id)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "본인 프로필만 수정할 수 있습니다");
+        }
+
+        profileService.updateById(id, profileRequestDto.getUsername(), profileRequestDto.getPassword());
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

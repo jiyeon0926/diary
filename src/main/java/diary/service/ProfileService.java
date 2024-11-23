@@ -6,20 +6,18 @@ import diary.entity.User;
 import diary.repository.ProfileRepository;
 import diary.controller.dto.ProfileRequestDto;
 import diary.controller.dto.ProfileResponseDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 
 @Service
+@RequiredArgsConstructor
 public class ProfileService {
     private final ProfileRepository profileRepository;
     private final PasswordEncoder passwordEncoder;
-
-    public ProfileService(ProfileRepository profileRepository, PasswordEncoder passwordEncoder) {
-        this.profileRepository = profileRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     // 프로필 단건 조회
     public ProfileResponseDto findProfileById(Long id){
@@ -35,10 +33,19 @@ public class ProfileService {
     }
 
     // ID로 프로필 변경
-    public void updateById(Long id, ProfileRequestDto profileRequestDto){
-        User userProfile = profileRepository.findById(id).orElseThrow(() -> new RuntimeException("User profile not found"));
-        userProfile.setUsername(profileRequestDto.getUsername());
-        userProfile.setPassword(passwordEncoder.encode(profileRequestDto.getPassword()));
+    public void updateById(Long id, String name, String password){
+        User userProfile = profileRepository.findUserByidOrElseThrow(id);
+        String oldPassword = userProfile.getPassword();
+        String newPassword = password;
+
+        boolean matches = passwordEncoder.matches(newPassword, oldPassword);
+
+        if (matches) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "동일한 비밀번호는 사용할 수 없습니다.");
+        }
+
+        userProfile.setUsername(name);
+        userProfile.setPassword(passwordEncoder.encode(newPassword));
         profileRepository.save(userProfile);
     }
 
