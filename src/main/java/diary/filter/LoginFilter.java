@@ -1,4 +1,4 @@
-package diary.Filter;
+package diary.filter;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
