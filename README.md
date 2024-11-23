@@ -44,8 +44,12 @@
 - 로그인한 사용자는 본인의 프로필만 수정 가능
 - 프로필 수정 전 비밀번호 확인 필수
 - 현재 비밀번호와 동일한 비밀번호로는 변경 불가
+- 탈퇴 전 비밀번호 확인 필수
+- 탈퇴한 사용자의 아이디는 재사용 할 수 없고, 복구도 불가
 - 게시물 수정 및 삭제는 작성자 본인만 가능
+- 게시물 삭제 시, 해당 게시물의 댓글 및 좋아요도 같이 삭제 됨
 - 댓글 수정 및 삭제는 댓글 작성자 혹은 게시물 작성자만 가능
+- 댓글 삭제 시, 해당 댓글의 좋아요도 같이 삭제 됨
 - 본인이 작성한 게시물과 댓글에 좋아요 불가
 - 같은 게시물에는 사용자당 한 번만 좋아요 가능
 - 기간별 게시물 검색 시, 시작일자와 종료일자 중 하나라도 지정 안하면 게시물 전체 조회
@@ -55,7 +59,7 @@
 |:----|:----|:----|:----|
 |김지연|1. 친구 관리</br>2. 댓글|https://blog.naver.com/yeondata</br>https://velog.io/@yeoni9094/posts|https://github.com/jiyeon0926|
 |김단빈|1. 사용자 인증</br>2. 좋아요|https://dreamcompass.tistory.com/|https://github.com/kimdanbin|
-|장대산|1. 게시물</br>2. 조건별 정렬</br>3.기간별 게시물 검색|https://velog.io/@diqkraud/posts|https://github.com/daesan12|
+|장대산|1. 게시물</br>2. 조건별 정렬</br>3. 기간별 게시물 검색|https://velog.io/@diqkraud/posts|https://github.com/daesan12|
 |임현수|1. 프로필|https://bluewhale-korea.tistory.com/|https://github.com/HySu|
 
 ------------------
