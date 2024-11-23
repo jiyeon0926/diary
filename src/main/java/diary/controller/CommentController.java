@@ -1,8 +1,9 @@
 package diary.controller;
 
+import diary.controller.dto.CommentUpdateResponseDto;
 import diary.entity.User;
 import diary.controller.dto.CommentRequestDto;
-import diary.controller.dto.CommentResponseDto;
+import diary.controller.dto.CommentFindAllResponseDto;
 import diary.service.CommentService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -22,31 +23,31 @@ public class CommentController {
 
     // 댓글 작성
     @PostMapping
-    public ResponseEntity<CommentResponseDto> saveComment(@PathVariable Long boardId,
-                                                          @Valid @RequestBody CommentRequestDto requestDto,
-                                                          HttpSession session) {
+    public ResponseEntity<CommentFindAllResponseDto> saveComment(@PathVariable Long boardId,
+                                                                 @Valid @RequestBody CommentRequestDto requestDto,
+                                                                 HttpSession session) {
         User user = (User) session.getAttribute("loginUser");
-        CommentResponseDto responseDto = commentService.saveComment(boardId, user.getId(), requestDto.getContent());
+        CommentFindAllResponseDto responseDto = commentService.saveComment(boardId, user.getId(), requestDto.getContent());
 
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
     // 댓글 조회
     @GetMapping
-    public List<CommentResponseDto> findAllByBoardId(@PathVariable Long boardId) {
+    public List<CommentFindAllResponseDto> findAllByBoardId(@PathVariable Long boardId) {
         return commentService.findAllByBoardId(boardId);
     }
 
     // 댓글 수정
     @PatchMapping("/{commentId}")
-    public ResponseEntity<CommentResponseDto> updateComment(@PathVariable Long boardId,
-                                                            @PathVariable Long commentId,
-                                                            @Valid @RequestBody CommentRequestDto requestDto,
-                                                            HttpSession session) {
+    public ResponseEntity<CommentUpdateResponseDto> updateComment(@PathVariable Long boardId,
+                                                                  @PathVariable Long commentId,
+                                                                  @Valid @RequestBody CommentRequestDto requestDto,
+                                                                  HttpSession session) {
         User user = (User) session.getAttribute("loginUser");
         Long writerId = commentService.findUserIdByBoardId(boardId);
 
-        CommentResponseDto responseDto = commentService.updateComment(boardId, commentId, user.getId(), writerId, requestDto.getContent());
+        CommentUpdateResponseDto responseDto = commentService.updateComment(boardId, commentId, user.getId(), writerId, requestDto.getContent());
 
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
