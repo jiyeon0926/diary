@@ -23,8 +23,8 @@ public class ProfileController {
         return new ResponseEntity<>(profileById, HttpStatus.OK);
     }
 
-    // 프로필 수정하기 전, 비밀번호 변경
-    @PatchMapping
+    // 프로필 수정하기 전, 비밀번호 확인
+    @PostMapping
     public ResponseEntity<Void> comparePassword(@PathVariable Long id, @RequestBody PasswordRequestDto passwordRequestDto, HttpSession session){
         profileService.comparePassword(id, passwordRequestDto);
         session.setAttribute("allowUpdate", true);
@@ -32,7 +32,7 @@ public class ProfileController {
     }
 
     // 프로필 수정
-    @PostMapping
+    @PatchMapping
     public ResponseEntity<Void> updateById(@PathVariable Long id, @RequestBody ProfileRequestDto profileRequestDto, HttpSession session){
         Boolean allowUpdate = (Boolean) session.getAttribute("allowUpdate");
 
