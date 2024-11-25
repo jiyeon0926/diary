@@ -39,7 +39,9 @@ public class LoginFilter implements Filter {
 
     // 화이트리스트거나 게시글 조회
     private boolean isWhiteList(String requestURI, String method) {
-
+        if(PatternMatchUtils.simpleMatch(new String[]{"/boards/following"}, requestURI) && method.equals("GET")){
+            return false;
+        }
         // 게시글 조회할 때는 로그인 없이 가능
         if (PatternMatchUtils.simpleMatch(new String[]{"/boards", "/boards/*"}, requestURI) && method.equals("GET")) {
             return true;
