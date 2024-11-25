@@ -11,8 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
@@ -21,7 +19,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -108,7 +105,6 @@ public class BoardService {
     }
 
 
-
     public List<BoardResponseDto> findAllFollow(Long id, Pageable pageable, String sortBy, LocalDate startDate, LocalDate endDate) {
         LocalDateTime startDateTime = startDate != null ? startDate.atStartOfDay() : null;
         LocalDateTime endDateTime = endDate != null ? endDate.atTime(LocalTime.MAX) : null;
@@ -118,26 +114,24 @@ public class BoardService {
         }
         Page<BoardResponseDto> boardResponseDtoPage;
 
-        if("good".equals(sortBy)) {
+        if ("good".equals(sortBy)) {
             pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "gb.board"));
-            if(startDate != null && endDate != null) {
+            if (startDate != null && endDate != null) {
 
                 //내가 팔로우한 사람의 게시글을 기간별 좋아요 많은 순 조회
                 System.out.println("내가 팔로우한 사람의 게시글을 기간별 좋아요 많은 순 조회");
-                boardResponseDtoPage = boardRepository.findByFollowingUsersAndPeriodAndGood(id, startDateTime,endDateTime,pageable);
-            }else{
-                //내가 팔로우한  사람의 게시글을 전체기간 좋아요 많은 순 조회  현재오류
+                boardResponseDtoPage = boardRepository.findByFollowingUsersAndPeriodAndGood(id, startDateTime, endDateTime, pageable);
+            } else {
+                //내가 팔로우한  사람의 게시글을 전체기간 좋아요 많은 순 조회
                 System.out.println("내가 팔로우한  사람의 게시글을 전체기간 좋아요 많은 순 조회  현재오류");
                 boardResponseDtoPage = boardRepository.findAllByFollowingUsersGood(id, pageable);
             }
-        }else{
-            if(startDate != null && endDate != null) {
+        } else {
+            if (startDate != null && endDate != null) {
                 //팔로우한 사람들의 게시글 기간별 조회
-                System.out.println("팔로우한 사람들의 게시글 기간별 조회");
                 boardResponseDtoPage = boardRepository.findByFollowingUsersAndPeriod(id, startDateTime, endDateTime, pageable);
-            }else{
+            } else {
                 //팔로우한 사람들의 게시글 전체기간 조회
-                System.out.println("팔로우한 사람들의 게시글 전체기간 조회");
                 boardResponseDtoPage = boardRepository.findAllByFollowingUsers(id, pageable);
             }
         }
